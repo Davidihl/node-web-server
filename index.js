@@ -1,20 +1,30 @@
-import fs from 'node:fs';
-import http from 'node:http';
-import https from 'node:https';
-import path from 'node:path';
+import fs from 'fs';
+import http from 'http';
+import path from 'path';
 
 // Definitions
 const host = 'localhost';
 const port = 3000;
-const root = './public';
+const root = 'public';
 
 const requestListener = function (req, res) {
-  res.writeHead(200);
-  res.end(req.url);
+  const filePath = path.join(root, req.url);
+  //  console.log('Accessing ' + filePath + '...');
+  //  console.log(req.url);
+  console.log(filePath);
 
-  if (req.url !== '/favicon.ico') {
-    console.log('Trying to access ' + req.url + ' ...');
-  }
+  fs.promises
+    .readFile(filePath)
+    .then((contents) => {
+      res.setHeader('Content-Type', 'text/html');
+      res.writeHead(200);
+      res.end(contents);
+    })
+    .catch((err) => {
+      res.writeHead(500);
+      res.end(err);
+      return;
+    });
 };
 
 const server = http.createServer(requestListener);
