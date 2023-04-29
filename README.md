@@ -13,3 +13,5 @@ Following filetypes are supported:
 .htm
 .jpg
 
+If you enter just a directory, the server tries to redirect you to index.html and if it is not found, index.htm
+Only files within the `public` directory considered.
