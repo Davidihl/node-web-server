@@ -44,7 +44,10 @@ const requestListener = function (req, res) {
       res.writeHead(200);
       res.end(contents);
     })
+
+    // If error happens...
     .catch((err) => {
+      // Check if its because we need to look for .htm
       if (path.basename(filePath) === 'index.html') {
         fs.promises.readFile(filePath.slice(0, -1)).then((contents) => {
           res.statusCode = 200;
