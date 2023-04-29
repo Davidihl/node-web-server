@@ -2,8 +2,14 @@
 
 ## Step 1
 
-Create a local SSL Certificate using
+Start the Webserver
 
 ```bash
-openssl req -nodes -new -x509 -keyout server.key -out server.cert
+node index.js
 ```
+
+Following filetypes are supported:
+.html
+.htm
+.jpg
+

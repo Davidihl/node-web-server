@@ -8,19 +8,23 @@ const port = 3000;
 const root = 'public';
 
 const requestListener = function (req, res) {
+  let filePath = "";
   if(req.url.slice(-1) === "/") {
-  const filePath = path.join(root, req.url, 'index.htm');
+  filePath = path.join(root, req.url, 'index.html');
   } else {
-  const filePath = path.join(root, req.url);
+  filePath = path.join(root, req.url);
   }
   //  console.log('Accessing ' + filePath + '...');
   //  console.log(req.url);
   console.log(req.url);
   console.log(filePath);
+  console.log(path.extname(req.url));
+
 
   fs.promises
     .readFile(filePath)
     .then((contents) => {
+      res.statusCode = 200;
 
       //Log what filetype is called
       console.log(path.extname(filePath));
@@ -40,17 +44,28 @@ const requestListener = function (req, res) {
       
       res.writeHead(200);
       res.end(contents);
+
     })
-    .catch((err) => {      
-      fs.promises
-        .readFile('404.html')
-        .then((contents) => {
-          res.statusCode = 404;
-          res.setHeader('Content-Type', 'text/html');
-          res.end(contents);
-          console.log(err.message);
-          return;
-        })
+    .catch((err) => {
+      if(path.basename(filePath) === 'index.html'){
+        fs.promises
+          .readFile(filePath.slice(0, -1))
+          .then((contents) => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'text/html');
+            res.end(contents);
+          })
+      } else {
+        fs.promises
+          .readFile('404.html')
+          .then((contents) => {
+            res.statusCode = 404;
+            res.setHeader('Content-Type', 'text/html');
+            res.end(contents);
+            console.log(err.message);
+            return;
+          })
+      }
     });
 };
 
