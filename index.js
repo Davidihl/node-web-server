@@ -49,12 +49,14 @@ const requestListener = function (req, res) {
         fs.promises.readFile(filePath.slice(0, -1)).then((contents) => {
           res.statusCode = 200;
           res.setHeader('Content-Type', 'text/html');
+          res.writeHead(200);
           res.end(contents);
         });
       } else {
         fs.promises.readFile('404.html').then((contents) => {
           res.statusCode = 404;
           res.setHeader('Content-Type', 'text/html');
+          res.writeHead(404);
           res.end(contents);
           console.log(err.message);
           return;
