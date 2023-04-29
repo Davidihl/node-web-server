@@ -9,13 +9,13 @@ const root = 'public';
 
 const requestListener = function (req, res) {
   let filePath = '';
+  // If no file is accessed, assume they want index.html
   if (req.url.slice(-1) === '/') {
     filePath = path.join(root, req.url, 'index.html');
   } else {
     filePath = path.join(root, req.url);
   }
-  //  console.log('Accessing ' + filePath + '...');
-  //  console.log(req.url);
+
   console.log(req.url);
   console.log(filePath);
   console.log(path.extname(req.url));
